@@ -12,6 +12,13 @@ const ContactForm = () => {
         phone: edit.current.phone || "",
         type: edit.current.type || "personal",
       });
+    } else {
+      setContact({
+        name: "",
+        phone: "",
+        email: "",
+        type: "personal",
+      });
     }
   }, [edit]);
 
@@ -53,7 +60,9 @@ const ContactForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3 className="text-primary">Add Contact</h3>
+      <h3 className="text-primary">
+        {edit.isEdit ? "Edit Contact" : "ADD Contact"}
+      </h3>
       <input
         type="text"
         placeholder="Name"
@@ -95,7 +104,7 @@ const ContactForm = () => {
       <div>
         <input
           type="submit"
-          value="Add Contact"
+          value={edit.isEdit ? "Edit Contact" : "Add Contact"}
           className="btn btn-primary btn-block"
         />
       </div>

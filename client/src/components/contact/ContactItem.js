@@ -7,6 +7,10 @@ const ContactItem = ({ contact }) => {
   const { name, phone, email, type } = contact;
 
   const handleDelete = () => {
+    setEdit({
+      isEdit: false,
+      current: null,
+    });
     deleteContact(contact.id);
   };
 
