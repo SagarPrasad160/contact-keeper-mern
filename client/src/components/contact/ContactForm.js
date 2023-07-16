@@ -1,8 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ContactContext from "../../context/ContactContext";
 
 const ContactForm = () => {
-  const { addContact } = useContext(ContactContext);
+  const { addContact, edit, editContact } = useContext(ContactContext);
+
+  useEffect(() => {
+    if (edit.isEdit) {
+      setContact({
+        name: edit.current.name,
+        email: edit.current.email || "",
+        phone: edit.current.phone || "",
+        type: edit.current.type || "personal",
+      });
+    }
+  }, [edit]);
+
   const [contact, setContact] = useState({
     name: "",
     phone: "",
@@ -21,7 +33,16 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addContact(contact);
+    // check if it's an edit
+    if (edit.isEdit) {
+      // delete the contact first
+      editContact(edit.current.id, contact);
+    } else {
+      // Add New Contact
+      addContact(contact);
+    }
+
+    // Clear Form Fields
     setContact({
       name: "",
       email: "",

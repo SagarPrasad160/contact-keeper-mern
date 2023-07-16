@@ -38,13 +38,41 @@ const contactsArr = [
 export function ContactProvider({ children }) {
   const [contacts, setContacts] = useState(contactsArr);
 
+  const [edit, setEdit] = useState({ isEdit: false, current: null });
+
   const addContact = (contact) => {
     contact.id = uuidv4();
     setContacts([...contacts, contact]);
   };
 
+  const editContact = (id, newContact) => {
+    const updatedContacts = contacts.map((contact) => {
+      if (contact.id === id) {
+        return {
+          ...contact,
+          ...newContact,
+        };
+      }
+      return contact;
+    });
+    setContacts(updatedContacts);
+  };
+
+  const deleteContact = (id) => {
+    setContacts((contacts) => contacts.filter((contact) => contact.id !== id));
+  };
+
   return (
-    <ContactContext.Provider value={{ contacts, addContact }}>
+    <ContactContext.Provider
+      value={{
+        contacts,
+        addContact,
+        deleteContact,
+        edit,
+        editContact,
+        setEdit,
+      }}
+    >
       {children}
     </ContactContext.Provider>
   );
