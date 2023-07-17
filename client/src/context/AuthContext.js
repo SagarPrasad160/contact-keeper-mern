@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 import setAuthToken from "../utils/setAuthToken";
@@ -42,9 +42,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loadUser = async () => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
     try {
       const res = await axios.get("/api/auth");
       setAuth({
@@ -64,7 +61,6 @@ export const AuthProvider = ({ children }) => {
         "Content-Type": "application/json",
       },
     };
-
     try {
       const res = await axios.post("/api/users", formData, config);
       registerSuccess(res.data);
@@ -75,6 +71,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginUser = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.post("/api/auth", formData, config);
+      registerSuccess(res.data);
+      loadUser();
+    } catch (error) {
+      console.log(error);
+      registerFail(error.response.data.msg);
+    }
+  };
+
+  // set token on initial app loading
+  setAuthToken(auth.token);
+
+  if (auth.loading) {
+    loadUser();
+  }
+
+  useEffect(() => {
+    setAuthToken(auth.token);
+  }, [auth.token]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -84,6 +108,7 @@ export const AuthProvider = ({ children }) => {
         error: auth.error,
         registerSuccess,
         registerUser,
+        loginUser,
         clearErrors,
         loadUser,
       }}

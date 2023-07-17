@@ -7,6 +7,10 @@ import { Navigate } from "react-router-dom";
 
 const Register = () => {
   const { handleAlert } = useContext(AlertContext);
+
+  const { registerUser, error, clearErrors, isAuthenticated } =
+    useContext(AuthContext);
+
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -15,9 +19,6 @@ const Register = () => {
   });
 
   const { name, email, password, password2 } = user;
-
-  const { registerUser, error, clearErrors, isAuthenticated } =
-    useContext(AuthContext);
 
   useEffect(() => {
     if (error === "User already exists") {
@@ -39,6 +40,7 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    clearErrors();
     if (!name || !email || !password || !password2) {
       handleAlert("Please enter all fields", "danger");
     } else if (password !== password2) {
