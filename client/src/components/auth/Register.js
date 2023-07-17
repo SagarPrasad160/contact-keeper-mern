@@ -1,6 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import AlertContext from "../../context/AlertContext";
+import AuthContext from "../../context/AuthContext";
+
+import { Navigate } from "react-router-dom";
 
 const Register = () => {
   const { handleAlert } = useContext(AlertContext);
@@ -13,12 +16,26 @@ const Register = () => {
 
   const { name, email, password, password2 } = user;
 
+  const { registerUser, error, clearErrors, isAuthenticated } =
+    useContext(AuthContext);
+
+  useEffect(() => {
+    if (error === "User already exists") {
+      handleAlert(error, "danger");
+      clearErrors();
+    }
+  }, [error, isAuthenticated, handleAlert, clearErrors]);
+
   const handleChange = (e) => {
     setUser({
       ...user,
       [e.target.name]: e.target.value,
     });
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,7 +44,11 @@ const Register = () => {
     } else if (password !== password2) {
       handleAlert("Both password must match", "danger");
     } else {
-      console.log("Register User");
+      registerUser({
+        name,
+        email,
+        password,
+      });
     }
   };
 
