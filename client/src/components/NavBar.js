@@ -1,9 +1,17 @@
 import "../App.css";
 import PropTypes from "prop-types";
 
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 const NavBar = ({ icon, title }) => {
+  const { isAuthenticated, logoutUser } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logoutUser();
+  };
+
   return (
     <div className="navbar bg-primary">
       <h1>
@@ -11,10 +19,15 @@ const NavBar = ({ icon, title }) => {
         {title}
       </h1>
       <ul>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/register">Register</Link>
-        <Link to="/login">Login</Link>
+        {isAuthenticated && <Link to="/">Home</Link>}
+        {isAuthenticated && <Link to="/about">About</Link>}
+        {isAuthenticated && <Link onClick={handleLogout}>Logout</Link>}
+        {!isAuthenticated && (
+          <>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
+          </>
+        )}
       </ul>
     </div>
   );

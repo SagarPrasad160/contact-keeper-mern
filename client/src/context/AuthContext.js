@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setAuth({
       ...auth,
+      token: null,
       loading: false,
       isAuthenticated: false,
       user: null,
@@ -64,7 +65,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post("/api/users", formData, config);
       registerSuccess(res.data);
-      loadUser();
+      if (auth.token) {
+        loadUser();
+      }
     } catch (error) {
       console.log(error);
       registerFail(error.response.data.msg);
@@ -81,22 +84,27 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post("/api/auth", formData, config);
       registerSuccess(res.data);
-      loadUser();
+      if (auth.token) {
+        loadUser();
+      }
     } catch (error) {
       console.log(error);
       registerFail(error.response.data.msg);
     }
   };
 
+  const logoutUser = () => {
+    registerFail();
+  };
+
   // set token on initial app loading
   setAuthToken(auth.token);
-
-  if (auth.loading) {
-    loadUser();
-  }
-
   useEffect(() => {
     setAuthToken(auth.token);
+    if (auth.token) {
+      loadUser();
+    }
+    // eslint-disable-next-line
   }, [auth.token]);
 
   return (
@@ -109,6 +117,7 @@ export const AuthProvider = ({ children }) => {
         registerSuccess,
         registerUser,
         loginUser,
+        logoutUser,
         clearErrors,
         loadUser,
       }}
