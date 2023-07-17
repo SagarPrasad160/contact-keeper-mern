@@ -5,21 +5,34 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import Alerts from "./components/Alerts";
+
+import { AlertProvider } from "./context/AlertContext";
+import { AuthProvider } from "./context/AuthContext";
 import { ContactProvider } from "./context/ContactContext";
 
 function App() {
   return (
-    <ContactProvider>
-      <Router>
-        <NavBar />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </div>
-      </Router>
-    </ContactProvider>
+    <AuthProvider>
+      <ContactProvider>
+        <AlertProvider>
+          <Router>
+            <NavBar />
+            <div className="container">
+              <Alerts />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+              </Routes>
+            </div>
+          </Router>
+        </AlertProvider>
+      </ContactProvider>
+    </AuthProvider>
   );
 }
 

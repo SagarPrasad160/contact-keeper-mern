@@ -1,0 +1,92 @@
+import React, { useState, useContext } from "react";
+
+import AlertContext from "../../context/AlertContext";
+
+const Register = () => {
+  const { handleAlert } = useContext(AlertContext);
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
+
+  const { name, email, password, password2 } = user;
+
+  const handleChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name || !email || !password || !password2) {
+      handleAlert("Please enter all fields", "danger");
+    } else if (password !== password2) {
+      handleAlert("Both password must match", "danger");
+    } else {
+      console.log("Register User");
+    }
+  };
+
+  return (
+    <div className="form-container" onSubmit={handleSubmit}>
+      <h1>
+        Account <span className="text-primary">Register</span>
+      </h1>
+      <form>
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+          <input
+            name="name"
+            type="text"
+            value={name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            name="email"
+            type="email"
+            value={email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            name="password"
+            type="password"
+            value={password}
+            onChange={handleChange}
+            required
+            minLength="6"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password2">Confirm Password</label>
+          <input
+            name="password2"
+            type="password"
+            value={password2}
+            onChange={handleChange}
+            required
+            minLength="6"
+          />
+        </div>
+        <input
+          type="submit"
+          value="Register"
+          className="btn btn-primary btn-block"
+        />
+      </form>
+    </div>
+  );
+};
+
+export default Register;
