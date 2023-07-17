@@ -43,7 +43,7 @@ const ContactForm = () => {
     // check if it's an edit
     if (edit.isEdit) {
       // delete the contact first
-      editContact(edit.current.id, contact);
+      editContact(edit.current._id, contact);
     } else {
       // Add New Contact
       addContact(contact);
@@ -69,6 +69,7 @@ const ContactForm = () => {
         name="name"
         value={name}
         onChange={handleChange}
+        required
       />
       <input
         type="email"
@@ -83,6 +84,7 @@ const ContactForm = () => {
         name="phone"
         value={phone}
         onChange={handleChange}
+        required
       />
       <h5>Contact Type</h5>
       <input

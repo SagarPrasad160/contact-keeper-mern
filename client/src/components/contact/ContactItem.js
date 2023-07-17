@@ -11,7 +11,7 @@ const ContactItem = ({ contact }) => {
       isEdit: false,
       current: null,
     });
-    deleteContact(contact.id);
+    deleteContact(contact._id);
   };
 
   const handleEdit = () => {
