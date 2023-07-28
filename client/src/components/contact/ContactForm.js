@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import ContactContext from "../../context/ContactContext";
 
 const ContactForm = () => {
-  const { addContact, edit, editContact } = useContext(ContactContext);
+  const { addContact, edit, editContact, setEdit } = useContext(ContactContext);
 
   useEffect(() => {
     if (edit.isEdit) {
@@ -44,6 +44,10 @@ const ContactForm = () => {
     if (edit.isEdit) {
       // delete the contact first
       editContact(edit.current._id, contact);
+      setEdit({
+        isEdit: false,
+        current: null,
+      });
     } else {
       // Add New Contact
       addContact(contact);

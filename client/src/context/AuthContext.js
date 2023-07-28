@@ -97,8 +97,6 @@ export const AuthProvider = ({ children }) => {
     registerFail();
   };
 
-  // set token on initial app loading
-  setAuthToken(auth.token);
   useEffect(() => {
     setAuthToken(auth.token);
     if (auth.token) {
