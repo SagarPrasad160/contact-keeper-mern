@@ -35,8 +35,6 @@ export const AlertProvider = ({ children }) => {
     }
   };
 
-  console.log("alerts", alerts);
-
   const removeAlert = (id) => {
     setAlerts((alerts) => alerts.filter((alert) => alert.id !== id));
   };
