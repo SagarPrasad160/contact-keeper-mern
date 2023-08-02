@@ -35,6 +35,8 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  console.log("auth State", auth);
+
   const clearErrors = () => {
     setAuth({
       ...auth,
@@ -88,7 +90,11 @@ export const AuthProvider = ({ children }) => {
         loadUser();
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errors);
+      if (error.response.data.errors) {
+        registerFail(error.response.data.errors);
+        return;
+      }
       registerFail(error.response.data.msg);
     }
   };

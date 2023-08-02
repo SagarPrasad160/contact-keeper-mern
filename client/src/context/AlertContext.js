@@ -5,20 +5,40 @@ const AlertContext = createContext();
 export const AlertProvider = ({ children }) => {
   const [alerts, setAlerts] = useState([]);
 
-  const handleAlert = (message, type) => {
-    const newAlert = {};
-    newAlert.message = message;
-    newAlert.type = type;
-    newAlert.id = uuidv4();
-    setAlerts([...alerts, newAlert]);
+  const handleAlert = (errors, type) => {
+    if (Array.isArray(errors)) {
+      errors.forEach((error) => {
+        const newAlert = {
+          message: error.msg,
+          type: type,
+          id: uuidv4(),
+        };
 
-    setTimeout(() => {
-      removeAlert(newAlert.id);
-    }, 5000);
+        setAlerts((prevAlerts) => [...prevAlerts, newAlert]);
+
+        setTimeout(() => {
+          removeAlert(newAlert.id);
+        }, 5000);
+      });
+    } else {
+      const newAlert = {
+        message: errors,
+        type: type,
+        id: uuidv4(),
+      };
+
+      setAlerts((prevAlerts) => [...prevAlerts, newAlert]);
+
+      setTimeout(() => {
+        removeAlert(newAlert.id);
+      }, 5000);
+    }
   };
 
+  console.log("alerts", alerts);
+
   const removeAlert = (id) => {
-    setAlerts(alerts.filter((alert) => alert.id !== id));
+    setAlerts((alerts) => alerts.filter((alert) => alert.id !== id));
   };
 
   return (

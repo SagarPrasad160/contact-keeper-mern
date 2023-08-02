@@ -16,8 +16,8 @@ const Login = () => {
   const { email, password } = user;
 
   useEffect(() => {
-    if (error === "Invalid Credentials") {
-      handleAlert("Invalid Credentials", "danger");
+    if (error) {
+      handleAlert(error, "danger");
       clearErrors();
     }
   }, [error, handleAlert, clearErrors]);
